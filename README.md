@@ -11,7 +11,7 @@
 - Thymeleaf
 - Spring Security
 - Bootstrap 5
-- MySQL / MariaDB
+- MySQL 
 - JPA (Hibernate)
 
 ---
