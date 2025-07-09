@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Asistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Animación de desvanecimiento */
+        .fade-out {
+            transition: opacity 0.5s ease-out;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center text-success mb-4">Registro de Asistencia</h2>
+
+    <!-- Mensajes flash -->
+    <div id="mensajeExito" th:if="${mensajeExito}" class="alert alert-success text-center" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert alert-danger text-center" th:text="${mensajeError}"></div>
+
+    <!-- Botón para nuevo registro -->
+    <div class="d-grid gap-2 col-6 mx-auto mb-3">
+        <a th:href="@{/admin/asistencia/create}" class="btn btn-outline-success">Nuevo Registro de Asistencia</a>
+    </div>
+
+    <!-- Filtro y botón de exportar -->
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <form class="d-flex align-items-center" th:action="@{/admin/asistencia/buscar}" method="get">
+                <select class="form-select me-2" name="filtro" required>
+                    <option value="">Filtrar por...</option>
+                    <option value="id" th:selected="${param.filtro == 'id'}">ID</option>
+                    <option value="nombre" th:selected="${param.filtro == 'nombre'}">Nombre</option>
+                </select>
+                <input type="text" class="form-control me-2" name="termino"
+                       placeholder="Ingrese el término de búsqueda"
+                       th:value="${param.termino}" required>
+                <button type="submit" class="btn btn-success me-2">Buscar</button>
+
+                <!-- Botón limpiar -->
+                <a th:if="${param.filtro != null}" th:href="@{/admin/asistencia}"
+                   class="btn btn-outline-dark d-flex align-items-center justify-content-center"
+                   style="height: 38px;">
+                    <span class="me-1">✖</span>
+                </a>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <a th:href="@{/admin/asistencia/exportar}" class="btn btn-outline-dark">Descargar Reporte (Excel)</a>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <table class="table table-bordered text-center">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Fecha y Hora de Entrada</th>
+            <th>Fecha y Hora de Salida</th>
+            <th>Acciones</th>
+            <th>Marcar Salida</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(registros)}">
+            <td colspan="6" class="text-muted">No hay registros de asistencia.</td>
+        </tr>
+        <tr th:each="registro : ${registros}">
+            <td th:text="${registro.id}"></td>
+            <td th:text="${registro.usuario != null ? registro.usuario.nombre + ' ' + registro.usuario.apellido : '—'}"></td>
+            <td th:text="${#temporals.format(registro.fechaHoraEntrada, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${registro.fechaHoraSalida != null ? #temporals.format(registro.fechaHoraSalida, 'dd/MM/yyyy HH:mm') : '—'}"></td>
+
+            <!-- ACCIONES: Ver, Editar, Eliminar -->
+            <td>
+                <a th:href="@{/admin/asistencia/ver/{id}(id=${registro.id})}" class="btn btn-success btn-sm mb-1">Ver</a>
+                <a th:href="@{/admin/asistencia/editar/{id}(id=${registro.id})}" class="btn btn-primary btn-sm mb-1">Editar</a>
+                <form th:action="@{/admin/asistencia/eliminar/{id}(id=${registro.id})}" method="post" th:object="${registro}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </td>
+
+            <!-- MARCAR SALIDA -->
+            <td>
+                <form th:action="@{/admin/asistencia/salida/{id}(id=${registro.id})}" method="post">
+                    <button class="btn btn-warning btn-sm" type="submit"
+                            th:disabled="${registro.fechaHoraSalida != null}">
+                        Marcar Salida
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Volver -->
+    <div class="text-center mt-4">
+        <a th:href="@{/admin/dashboard}" class="btn btn-outline-success">Volver al Dashboard</a>
+    </div>
+</div>
+
+<!-- Script para ocultar mensaje -->
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const mensaje = document.getElementById('mensajeExito');
+        if (mensaje) {
+            setTimeout(() => {
+                mensaje.classList.add('fade-out');
+                setTimeout(() => mensaje.remove(), 500);
+            }, 3000);
+        }
+    });
+</script>
+</body>
+</html>

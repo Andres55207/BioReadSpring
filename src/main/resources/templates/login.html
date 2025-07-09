@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - BioRead</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .brand-title {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .login-btn {
+            background-color: #198754;
+            border: none;
+        }
+
+        .login-btn:hover {
+            background-color: #157347;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box text-center">
+    <h2 class="brand-title mb-1">Bienvenido a BioRead</h2>
+    <p class="text-muted mb-4">Inicia sesión para continuar</p>
+
+    <form th:action="@{/login}" method="post">
+        <div class="mb-3 text-start">
+            <label class="form-label">Usuario:</label>
+            <input type="text" name="username" class="form-control" required />
+        </div>
+        <div class="mb-4 text-start">
+            <label class="form-label">Contraseña:</label>
+            <input type="password" name="password" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success login-btn w-100">Ingresar</button>
+    </form>
+
+    <!-- Mensaje de logout exitoso -->
+    <div th:if="${param.logout}" class="alert alert-success mt-4 p-2" id="logout-msg">
+        Has cerrado sesión correctamente
+    </div>
+</div>
+
+<!-- Script para ocultar mensaje después de 4 segundos -->
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const msg = document.getElementById('logout-msg');
+        if (msg) {
+            setTimeout(() => {
+                msg.style.transition = 'opacity 0.5s ease';
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 500);
+            }, 4000);
+        }
+    });
+</script>
+
+</body>
+</html>

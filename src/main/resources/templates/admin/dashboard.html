@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f6f8;
+        }
+
+        .content-wrapper {
+            flex: 1;
+        }
+
+        .navbar {
+            background-color: #198754;
+            color: white;
+        }
+
+        .navbar .btn {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .section-title {
+            color: #198754;
+            font-weight: 700;
+            border-bottom: 2px solid #198754;
+            padding-bottom: 4px;
+        }
+
+        .summary-box {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            text-align: center;
+            border-radius: 6px;
+        }
+
+        .quick-action {
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .quick-action:hover {
+            opacity: 0.95;
+        }
+
+        .bg-light-green {
+            background-color: #d1e7dd;
+            border: 1px solid #badbcc;
+        }
+
+        .bg-light-blue {
+            background-color: #cfe2ff;
+            border: 1px solid #9ec5fe;
+        }
+
+        .footer {
+            background-color: #212529;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar superior -->
+<nav class="navbar navbar-expand-lg px-4 d-flex justify-content-between align-items-center">
+    <span class="fs-5 fw-bold">Panel de Administrador</span>
+    <div class="d-flex align-items-center gap-3">
+        <span th:text="'Bienvenido, ' + ${usuario}"></span>
+        <a th:href="@{/logout}" class="btn btn-sm text-white">Cerrar Sesión</a>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="content-wrapper container mt-4">
+
+    <!-- Navegación -->
+    <div class="mb-3 d-flex gap-2">
+        <a th:href="@{/admin/asistencia}" class="btn btn-outline-secondary btn-sm">Gestionar Asistencia</a>
+    </div>
+
+    <!-- Resumen -->
+    <h5 class="section-title">Resumen del Sistema</h5>
+    <p class="text-muted">Información general y rápida del sistema.</p>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="summary-box">
+                <h6>Usuarios Registrados</h6>
+                <p class="fs-4 fw-bold" th:text="${totalUsuarios}">1</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="summary-box">
+                <h6>Administradores Activos</h6>
+                <p class="fs-4 fw-bold">1</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <h5 class="section-title">Acciones Rápidas</h5>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a th:href="@{/usuarios/formulario}" class="quick-action bg-light-green text-dark text-decoration-none d-block">
+                Crear Nuevo Usuario
+                <div class="small fw-normal mt-2">Registrar un nuevo usuario en el sistema.</div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a th:href="@{/admin/asistencia}" class="quick-action bg-light-blue text-dark text-decoration-none d-block">
+                Registrar Asistencia Manual
+                <div class="small fw-normal mt-2">Crear un registro de asistencia para un usuario.</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Registros recientes -->
+    <h5 class="section-title">Registros de Asistencia</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID Usuario</th>
+                    <th>Nombre</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(registros)}">
+                    <td colspan="5" class="text-muted">No hay registros de asistencia recientes.</td>
+                </tr>
+                <tr th:each="registro : ${registros}">
+                    <td th:text="${registro.usuario.id}"></td>
+                    <td th:text="${registro.usuario.nombre} + ' ' + ${registro.usuario.apellido}"></td>
+                    <td th:text="${#temporals.format(registro.fechaHoraEntrada, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${registro.fechaHoraSalida != null ? #temporals.format(registro.fechaHoraSalida, 'dd/MM/yyyy HH:mm') : '—'}"></td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    © 2025 BioRead - Panel de Administrador
+</div>
+
+</body>
+</html>

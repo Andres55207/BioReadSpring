@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .navbar {
+            background-color: #28a745;
+            color: white;
+            padding: 1rem;
+        }
+
+        .navbar .btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .summary-card {
+            background-color: #f8f9fa;
+            border-left: 6px solid #6c757d;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            height: 100%;
+        }
+
+        .summary-card h5 {
+            color: #495057;
+        }
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Barra superior -->
+<nav class="navbar d-flex justify-content-between align-items-center">
+    <span class="fs-5 fw-bold">Panel de Usuario</span>
+    <div class="d-flex gap-3 align-items-center">
+        <span th:text="'Bienvenido, ' + ${usuario}"></span>
+        <a th:href="@{/logout}" class="btn btn-sm">Cerrar Sesión</a>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="content container mt-4">
+
+    <h4 class="text-success mb-3">Resumen de Asistencia</h4>
+    <p>Aquí podrás ver un resumen de tu actividad de asistencia.</p>
+
+    <div class="row row-cols-1 row-cols-md-4 g-3">
+        <div class="col">
+            <div class="summary-card text-center">
+                <h5>Última Entrada</h5>
+                <p class="fs-5 fw-semibold"
+                   th:text="${ultimaEntrada != null ? #temporals.format(ultimaEntrada.fechaHoraEntrada, 'dd/MM/yyyy HH:mm') : '--'}"></p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="summary-card text-center">
+                <h5>Última Salida</h5>
+                <p class="fs-5 fw-semibold"
+                   th:text="${ultimaSalida != null ? #temporals.format(ultimaSalida.fechaHoraSalida, 'dd/MM/yyyy HH:mm') : '--'}"></p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="summary-card text-center">
+                <h5>Registros Hoy</h5>
+                <p class="fs-5 fw-semibold" th:text="${registrosHoy}">0</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="summary-card text-center">
+                <h5>Registros Este Mes</h5>
+                <p class="fs-5 fw-semibold" th:text="${registrosMes}">0</p>
+            </div>
+        </div>
+    </div>
+    <h4 class="text-success mt-5 mb-3">Historial Reciente</h4>
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora de Entrada</th>
+                    <th>Hora de Salida</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="registro : ${historial}">
+                    <td th:text="${#temporals.format(registro.fechaHoraEntrada, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#temporals.format(registro.fechaHoraEntrada, 'HH:mm')}"></td>
+                    <td th:text="${registro.fechaHoraSalida != null ? #temporals.format(registro.fechaHoraSalida, 'HH:mm') : '--'}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(historial)}">
+                    <td colspan="3" class="text-muted">Sin registros disponibles.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    © 2025 BioRead
+</footer>
+
+</body>
+</html>
