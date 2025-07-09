@@ -46,7 +46,7 @@ src/
 - Registro manual desde el panel de administrador
 - Filtro de registros por nombre o ID
 - Exportación de datos a Excel
-- Vista de dashboard con resumen y gráficos (opcional)
+- Vista de dashboard con resumen
 - CRUD completo de registros de asistencia
 - Control de acceso por rol (admin / usuario)
 - Diseño responsivo con Bootstrap
@@ -57,7 +57,7 @@ src/
 
 - Java 17 o superior
 - Maven
-- MySQL o MariaDB
+- MySQL
 
 ---
 
