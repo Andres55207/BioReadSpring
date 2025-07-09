@@ -18,18 +18,19 @@
 
 ##  Estructura del proyecto
 
+```plaintext
 src/
 ├── main/
-│ ├── java/com/example/BioRead/
-│ │ ├── config/ # Seguridad y configuración
-│ │ ├── controller/ # Controladores MVC
-│ │ ├── model/ # Entidades JPA
-│ │ ├── repository/ # Interfaces de persistencia
-│ │ └── service/ # Servicios y lógica de negocio
-│ └── resources/
-│ ├── templates/ # Vistas Thymeleaf
-│ └── application.properties
-
+│   ├── java/com/example/BioRead/
+│   │   ├── config/        # Seguridad y configuración
+│   │   ├── controller/    # Controladores MVC
+│   │   ├── model/         # Entidades JPA
+│   │   ├── repository/    # Interfaces de persistencia
+│   │   └── service/       # Servicios y lógica de negocio
+│   └── resources/
+│       ├── templates/     # Vistas Thymeleaf
+│       └── application.properties
+```
 ---
 
 ##  Roles soportados
