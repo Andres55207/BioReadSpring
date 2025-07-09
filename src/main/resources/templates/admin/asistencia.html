@@ -48,8 +48,12 @@
             </form>
         </div>
         <div class="col-md-4 text-end">
-            <a th:href="@{/admin/asistencia/exportar}" class="btn btn-outline-dark">Descargar Reporte (Excel)</a>
-        </div>
+        <form th:action="@{/admin/asistencia/exportar}" method="get" class="d-inline">
+            <input type="hidden" name="filtro" th:value="${param.filtro}" />
+            <input type="hidden" name="termino" th:value="${param.termino}" />
+            <button type="submit" class="btn btn-outline-dark">Descargar Reporte (Excel)</button>
+        </form>
+</div>
     </div>
 
     <!-- Tabla -->

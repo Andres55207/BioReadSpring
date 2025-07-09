@@ -23,12 +23,13 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/redirigir", true)
-                .permitAll()
+            .loginPage("/login")
+            .defaultSuccessUrl("/redirigir", true)
+            .failureUrl("/login?error=true") 
+            .permitAll()
             )
             .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) // ✅ permite logout por GET
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) //  permite logout por GET
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")

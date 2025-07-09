@@ -150,11 +150,32 @@ public class AsistenciaController {
 
     // Exportar Excel
     @GetMapping("/exportar")
-    public void exportarExcel(HttpServletResponse response) throws IOException {
+    public void exportarExcel(@RequestParam(required = false) String filtro,
+                            @RequestParam(required = false) String termino,
+                            HttpServletResponse response) throws IOException {
+
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=registro_asistencia.xlsx");
 
-        List<RegistroAsistencia> registros = asistenciaRepo.findAll();
+        List<RegistroAsistencia> registros;
+
+        if (filtro != null && termino != null && !termino.isBlank()) {
+            if (filtro.equals("id")) {
+                try {
+                    Long id = Long.parseLong(termino);
+                    Optional<RegistroAsistencia> resultado = asistenciaRepo.findById(id);
+                    registros = resultado.map(List::of).orElse(List.of());
+                } catch (NumberFormatException e) {
+                    registros = List.of();
+                }
+            } else if (filtro.equals("nombre")) {
+                registros = asistenciaRepo.findByUsuarioNombreContainingIgnoreCase(termino);
+            } else {
+                registros = asistenciaRepo.findAll();
+            }
+        } else {
+            registros = asistenciaRepo.findAll();
+        }
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Asistencia");
@@ -180,7 +201,6 @@ public class AsistenciaController {
             row.createCell(2).setCellValue(entradaStr);
             row.createCell(3).setCellValue(salidaStr);
 
-            // Cálculo de duración
             if (r.getFechaHoraEntrada() != null && r.getFechaHoraSalida() != null) {
                 Duration duracion = Duration.between(r.getFechaHoraEntrada(), r.getFechaHoraSalida());
                 long horas = duracion.toHours();

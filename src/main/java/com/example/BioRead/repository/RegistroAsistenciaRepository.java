@@ -25,6 +25,6 @@ public interface RegistroAsistenciaRepository extends JpaRepository<RegistroAsis
     // Conteo por rango de fechas (para hoy y mes)
     int countByUsuarioAndFechaHoraEntradaBetween(Usuario usuario, LocalDateTime inicio, LocalDateTime fin);
 
-    // ✅ Historial completo del usuario
+    // Historial completo del usuario
     List<RegistroAsistencia> findByUsuarioOrderByFechaHoraEntradaDesc(Usuario usuario);
 }

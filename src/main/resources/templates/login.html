@@ -59,19 +59,26 @@
     <div th:if="${param.logout}" class="alert alert-success mt-4 p-2" id="logout-msg">
         Has cerrado sesión correctamente
     </div>
+
+    <!-- Mensaje de error de autenticación -->
+    <div th:if="${param.error}" class="alert alert-danger mt-4 p-2" id="error-msg">
+        Usuario o contraseña incorrectos
+    </div>
 </div>
 
 <!-- Script para ocultar mensaje después de 4 segundos -->
 <script>
     window.addEventListener('DOMContentLoaded', () => {
-        const msg = document.getElementById('logout-msg');
-        if (msg) {
-            setTimeout(() => {
-                msg.style.transition = 'opacity 0.5s ease';
-                msg.style.opacity = '0';
-                setTimeout(() => msg.remove(), 500);
-            }, 4000);
-        }
+        ['logout-msg', 'error-msg'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.5s ease';
+                    el.style.opacity = '0';
+                    setTimeout(() => el.remove(), 500);
+                }, 4000);
+            }
+        });
     });
 </script>
 
